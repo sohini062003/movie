@@ -13,7 +13,7 @@ nltk.download('punkt_tab')
 from nltk.stem import SnowballStemmer
 
 app = Flask(__name__)
-
+API_KEY = '390e76286265f7638bb6b19d86474639'
 movies = pickle.load(open('movie_list.pkl', 'rb'))
 # similarity = pickle.load(open('similarity.pkl', 'rb'))
 similarity=joblib.load(open('similarity2.joblib', 'rb'))
