@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendation App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        /* Carousel Styling */
+        .carousel {
+            margin-top: 30px;
+        }
+
+        .carousel-indicators [data-bs-target] {
+            background-color: #6c757d;
+            width: 12px;
+            height: 12px;
+        }
+
+        .carousel-control-prev,
+        .carousel-control-next {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            top:50px;
+        }
+
+        .carousel-control-prev-icon,
+        .carousel-control-next-icon {
+            width: 15px;
+            height: 15px;
+        }
+
+        .card {
+            width: 800px;
+            height: 300px;
+            margin: 0 auto;
+            border-radius: 10px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s ease-in-out;
+        }
+        #car-card{
+            border-radius: 5px;
+        }
+        #car-card:hover .card-inner {
+            transform: rotateY(180deg);
+            transition-duration: 1s;
+        }
+
+        .card-front,
+        .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            padding: 2px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            
+        }
+
+        .card-front {
+            background-color: #312B30;
+            color: #fff;
+            font-size:xx-large;
+        }
+
+        .card-back {
+            background-color:#956f6f ;
+            color: #fff;
+            transform: rotateY(180deg);
+            font-weight: 400;
+            font-size: 1.2rem;
+        }
+
+        /* Accordion Styling */
+        /* General Accordion Styling */
+.accordion {
+    border-radius: 10px;
+    overflow: hidden; /* Ensures consistent background */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow for depth */
+}
+
+.accordion-item {
+    background-color: #7b4f72;
+    border: 1px solid; /* Removes borders between items */
+    /* Removes default spacing */
+    transition: background-color 0.3s ease; /* Smooth color transition */
+}
+
+
+/* Accordion Header */
+.accordion-header .accordion-button {
+    background-color: #7b4f72;
+    color: #fff;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions for hover effects */
+    border: none;
+}
+
+.accordion-header .accordion-button:hover {
+    background-color: #9d6a96; /* Lighter shade on hover */
+    transform: scale(1.02); /* Slight zoom effect */
+}
+
+.accordion-header .accordion-button:focus {
+    box-shadow: 0 0 0 0.2rem rgba(123, 79, 114, 0.5); /* Adds focus outline for accessibility */
+}
+
+/* Accordion Body */
+.accordion-body {
+    background-color: #f8f9fa;
+    color: #141515; /* Dark text for better readability */
+    padding: 1rem;
+    border-radius: 0; /* Ensures consistent edges */
+     /* Slightly larger text for better readability */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.accordion-body:hover {
+    background-color: #ececec; /* Subtle change on hover */
+}
+
+.accordion-button{
+    font-size: 1.2rem;
+    font-weight: lighter;
+}
+/* Add Arrow Animation for Collapsed State */
+.accordion-header .accordion-button::after {
+    transition: transform 0.3s ease; /* Smooth arrow rotation */
+}
+
+.accordion-header .accordion-button.collapsed::after {
+    transform: rotate(-90deg); /* Rotate arrow when collapsed */
+}
+
+/* Optional: Adjust Font Sizes for Responsive Design */
+@media (max-width: 768px) {
+    .accordion-header .accordion-button {
+        font-size: 0.9rem; /* Adjust font size for smaller screens */
+    }
+    .accordion-body {
+        font-size: 0.85rem; /* Adjust text size for smaller screens */
+    }
+}
+
+
+        /* Flow of Work */
+        .list-group-item {
+            background-color: #f8f9fa;
+            border: none;
+            cursor: pointer;
+        }
+
+        .list-group-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .tab-content p {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        .container-fluid{
+            background-color: #f6e6e4;
+        }
+        /* General Styling */
+.social-icon {
+    width: 40px;
+    height: 40px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.9;
+}
+
+/* Hover Effect */
+.social-icon:hover {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+/* Alignment for Icon Container */
+.mt-3 {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+.footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 14px;
+        }
+        .nav-link {
+        transition: all 0.3s ease-in-out;
+        gap:1rem;
+        padding:2px;
+    }
+
+    .nav-link:hover {
+        text-decoration: none;
+        color: #e8cdac; /* Bootstrap primary color */
+        transform: scale(1.1);
+    }
+
+    .nav-link::after {
+        content: "";
+        display: block;
+        width: 0;
+        height: 2px;
+        background: #0dcaf0; /* Bootstrap primary color */
+        transition: width 0.3s ease-in-out;
+    }
+
+    .nav-link:hover::after {
+        width: 100%;
+    }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a href="index3.html">
+            <img src="/static/MOV ‘ EOUS3.png" width="200"  alt="logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active text-light" href="#Features">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#WorkFlow">Work Flow</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#Materials">Resources</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#About">About Me</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+
+    <div class="container-fluid  py-5 text-center" style="background: color #F1D4D4;">
+        <h1 class="display-4" style="color:#212A31; ">Overview</h1>
+        <p class="lead" style="color:#191e23;">Discover your next favorite movie with our recommendation app! Whether you're into action, romance, or thrillers, we’ve got personalized picks just for you. By analyzing your preferences and reviews, we make sure every suggestion hits the mark. Say goodbye to endless scrolling and hello to your perfect watchlist!</p>
+    </div>
+
+    <div class="container my-5" id="Features">
+        <h2 class="text-center">Features</h2>
+        <div class="accordion shadow-sm mx-auto mt-4 w-75 text-center " id="featuresAccordion" style= " background-color: #312B30;">
+            <div class="accordion-item text-center py-2" >
+                <h2 class="accordion-header text-center" id="featureOneHeading">
+                    <button class="accordion-button text-center lead " type="button" data-bs-toggle="collapse" data-bs-target="#featureOne" aria-expanded="true">
+                    Search by Movie
+                    </button>
+                </h2>
+                <div id="featureOne" class="accordion-collapse collapse show lead">
+                    <div class="accordion-body">
+                        Easily search for any movie by its title using the app's intuitive search feature. The app takes the movie name and provides recommendations for similar movies based on genre, themes, or audience preferences. This feature helps users expand their watchlist by discovering movies aligned with their interests, making it easier to find new favorites and enjoy a seamless movie-watching experience.                    </div>
+                </div>
+            </div>
+            <div class="accordion-item py-1">
+                <h2 class="accordion-header lead" id="featureTwoHeading">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#featureTwo">
+                    Genre-based Recommendations
+                    </button>
+                </h2>
+                <div id="featureTwo" class="accordion-collapse collapse">
+                    <div class="accordion-body lead">
+                        Discover movies that match your taste with personalized genre-based suggestions. Whether you love action-packed thrillers, heartwarming romances, or spine-chilling horrors, the app curates a tailored list of movies to suit your preferences, helping you explore films you might not have considered. With advanced AI algorithms, the app identifies patterns in your viewing habits to refine its recommendations over time. This ensures a personalized experience that keeps evolving, introducing you to hidden gems and popular hits alike.                    </div>
+                </div>
+            </div>
+            <div class="accordion-item py-1">
+                <h2 class="accordion-header lead" id="featureThreeHeading">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#featureThree">
+                        Detailed Description Of Movies
+                    </button>
+                </h2>
+                <div id="featureThree" class="accordion-collapse collapse">
+                    <div class="accordion-body lead">
+                        Dive deeper into any movie with detailed descriptions that include plot summaries, director and cast information, ratings, and box office performance. Learn about the movie’s background, its critical reception, and other interesting tidbits that make it a must-watch. Additionally, watch trailers directly within the app and discover streaming platforms where the movie is available, making it easier to decide and access your next movie pick.                    </div>
+                </div>
+                
+            </div>
+            <div class="accordion-item py-1">
+                <h2 class="accordion-header lead" id="featureThreeHeading">
+                    <button class="accordion-button collapsed lead" type="button" data-bs-toggle="collapse" data-bs-target="#featureFour">
+                        Viewer Reviews & Sentiment Analysis
+                    </button>
+                </h2>
+                <div id="featureFour" class="accordion-collapse collapse">
+                    <div class="accordion-body lead">
+                        Gain insights into audience opinions through user-generated reviews enhanced with AI-driven sentiment analysis. Understand the general mood surrounding a movie—whether viewers found it exciting, emotional, or disappointing—helping you decide if it’s worth watching.                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-5  py-5" style="background-color: #f6e6e4;" id="WorkFlow">
+        <h2 class="text-center lead " style="font-size:2rem;"><strong>Flow Of Work</strong></h2>
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="false">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="card" id="car-card">
+                        <div class="card-inner">
+                            <div class="card-front lead">I. Training an ML Model for Movie Similarity
+                                <br>
+                                <br>
+                                <br>
+                                 <div style="font-size:1.2rem; margin-bottom:-170px; margin-right: -70px;" >(Hover)</div>
+                            </div>
+                            <div class="card-back lead "><p class="px-1 text-center text-light ">
+                            The ML model was trained using movie metadata, such as title, overview, and keywords, which were preprocessed using NLP techniques (tokenization and stop-word removal).
+TF-IDF vectorization was used to convert text into numerical vectors, capturing the importance of terms in each movie description.
+Cosine similarity was employed to calculate the angular distance between vectors, allowing the system to find movies most similar to a given query.
+The model was fine-tuned and tested using TMDB datasets to ensure accurate and relevant recommendations.
+</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card" id="car-card">
+                        <div class="card-inner">
+                            <div class="card-front lead">II. Building Backend with Flask & TMDB API Integration
+                                <br>
+                                <br>
+                                <br>
+                                 <div style="font-size:1.2rem; margin-bottom:-170px; margin-right: 3px;" >(Hover)</div>
+                            </div>
+                            <div class="card-back lead"> <p class="px-1 text-center text-light ">
+                                Flask was used as the backend framework to connect the ML model with the TMDB API.
+When users search for a movie, Flask processes the query, retrieves similar movies using the trained model, and fetches additional metadata (e.g., titles, posters) from the TMDB API.
+Flask routes handle communication between the frontend and backend, ensuring efficient data delivery and smooth performance.
+                            </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card" id="car-card">
+                        <div class="card-inner">
+                            <div class="card-front lead">III. Implementing Genre-Based Recommendations
+                                <br>
+                                <br>
+                                <br>
+                                 <div style="font-size:1.2rem; margin-bottom:-170px; margin-right: -70px;" >(Hover)</div>
+                            </div>
+                            <div class="card-back lead"> <p class="px-1 text-center text-light ">
+                                Movie genres were retrieved from the TMDB API and mapped to each movie in the database.
+Users can select a genre (e.g., Action, Comedy) from the interface, and Flask fetches popular or top-rated movies from that genre via the TMDB API.
+This filter-based approach allows personalized exploration of movies based on user preferences.
+                            </p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card" id="car-card">
+                        <div class="card-inner">
+                            <div class="card-front lead">IV. Frontend Development for Recommendations
+                                <br>
+                                <br>
+                                <br>
+                                 <div style="font-size:1.2rem; margin-bottom:-170px; margin-right: -70px;" >(Hover)</div>
+                            </div>
+                            <div class="card-back lead"><p class="px-1 text-center text-light ">
+                                The frontend was designed with HTML, CSS, and JavaScript to ensure an intuitive and visually appealing user experience.
+Recommendations are displayed as clickable movie cards, with posters and titles arranged in a user-friendly layout.
+Interactive features like search bars, buttons, and carousels enhance user engagement, while JavaScript handles dynamic content updates for seamless interactivity.
+                            </p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card" id="car-card">
+                        <div class="card-inner">
+                            <div class="card-front lead">V. Fetching and Displaying Detailed Movie Information
+                                <br>
+                                <br>
+                                <br>
+                                 <div style="font-size:1.2rem; margin-bottom:-170px; margin-right: -1px;" >(Hover)</div>
+                            </div>
+                            <div class="card-back lead"><p class="px-1 text-center text-light ">
+                                Additional movie details (e.g., cast, crew, runtime, trailers, streaming platforms) were fetched using the TMDB API.
+A "More Info" button was added to every recommended movie, allowing users to view detailed information.
+The frontend was styled with CSS to display this data in a clean, organized, and responsive format, improving decision-making for users.
+
+                            </p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card" id="car-card">
+                        <div class="card-inner">
+                            <div class="card-front lead">VI. Sentiment Analysis for Movie Reviews
+                                <br>
+                                <br>
+                                <br>
+                                 <div style="font-size:1.2rem; margin-bottom:-170px; margin-right: -70px;" >(Hover)</div>
+                            </div>
+                            <div class="card-back lead"><p class="px-1 text-center text-light ">
+                                Model Training:
+The sentiment analysis model was trained using the IMDB dataset from Kaggle. Text preprocessing involved cleaning, tokenization, and vectorization with Bag-of-Words. Bernoulli Naive Bayes achieved over 85% accuracy and was saved using pickle for integration.
+<br>
+Flask API Integration:
+Flask fetched movie reviews from the TMDB API, processed them with the sentiment analysis model, and categorized them as positive or negative.
+<br>
+Frontend Development:
+A "Reviews" page was built using HTML, CSS, and JavaScript to display reviews. Positive reviews were highlighted in green, negative ones in red, and a sentiment summary was provided for better user experience.
+                            </p></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="card" id="car-card">
+                        <div class="card-inner">
+                            <div class="card-front lead">VII. Deploying the application
+                                <br>
+                                <br>
+                                <br>
+                                 <div style="font-size:1.2rem; margin-bottom:-170px; margin-right: -190px;" >(Hover)</div>
+                            </div>
+                            <div class="card-back lead"><p class="px-1 text-center text-light ">
+                                Once the app was fully developed, it was deployed using Render, a reliable platform for hosting web applications. The project code was first pushed to GitHub, ensuring version control and easy collaboration. Render was then configured to pull the code directly from the GitHub repository, allowing seamless deployment. With just a few clicks, the app was live and accessible to users, providing an intuitive interface for movie recommendations. This step ensured that people could access the app anytime, anywhere, and enjoy its features with ease.
+</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            </button>
+            <div class="carousel-indicators mt-4">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="5" aria-label="Slide 6"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="6" aria-label="Slide 7"></button>
+
+            </div>
+        </div>
+    </div>
+    <div class="container  shadow-sm rounded py-4 my-5" style="background-color: #F1D4D4;" id="Materials">
+        <h2 class="text-center mb-4 lead" style="font-size: 2rem;"><strong> Resources & Inspiration</strong></h2>
+        <div class="row" id="Materials">
+            <div class="col-md-4">
+                <div class="list-group" id="list-tab" role="tablist">
+                    <a class="list-group-item list-group-item-action active" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">Inspirations</a>
+                    <a class="list-group-item list-group-item-action" id="list-profile-list" data-bs-toggle="list" href="#list-profile" role="tab" aria-controls="list-profile">Materials</a>
+                    <a class="list-group-item list-group-item-action" id="list-messages-list" data-bs-toggle="list" href="#list-messages" role="tab" aria-controls="list-messages">APIs Tools & Libraries</a>
+                    <a class="list-group-item list-group-item-action" id="list-settings-list" data-bs-toggle="list" href="#list-settings" role="tab" aria-controls="list-settings">Techniques and Algorithms</a>
+                    <a class="list-group-item list-group-item-action" id="list-live-list" data-bs-toggle="list" href="#list-live" role="tab" aria-controls="list-live">Improvements</a>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="tab-content" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                        <p><strong>1. <i>Movie Recommendation Using NLP Techniques</i>
+                            Paper:</strong> "Movie Recommender System Using NLP and Deep Learning Techniques"
+                            <strong>Authors:</strong> A. Jha, A. Singh
+                            <br>
+                            <strong>Published In:</strong> IEEE Access, 2020
+                            <br>
+                            <strong>Key Takeaways:</strong>
+                            Explains how NLP techniques can be used to analyze movie plots, genres, and keywords.
+                            Provides examples of embedding techniques like Word2Vec and how they apply to similarity analysis.
+                            <br>
+                             <strong>2. <i>Existing Movie Recommendation Apps:</i></strong> Netflix, IMDb, and Letterboxd.
+                            <br>
+                            <strong>3. <i>Content-Based Recommender Systems</i>
+                            Paper:</strong> "Content-Based Recommendation Systems: State of the Art and Trends"<br>
+                            <strong>Authors: </strong>Lops P., Gemmis M., Semeraro G.
+                            <br>
+                            <strong>Published In: </strong>Springer, 2011
+                            <br>
+                            <strong>Key Takeaways:</strong>
+                            Describes content-based filtering methods, focusing on NLP techniques for analyzing textual content.
+                            Useful for implementing the cosine similarity-based movie recommendation model.
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+                        <p style="font-size: 18px; font-weight: bold; color: #2c3e50;">1. IMDB Dataset for Sentiment Analysis</p>
+                        <p style="font-size: 16px; color: #34495e; font-weight: bold;">Source:</p>
+                        <p style="font-size: 16px; color: #2c3e50;">
+                            <a href="https://www.kaggle.com/datasets/lakshmi25npathi/imdb-dataset-of-50k-movie-reviews" style="color: #2980b9; text-decoration: none;">Kaggle IMDB Dataset</a>
+                        </p>
+                        <p style="font-size: 16px; color: #34495e; font-weight: bold;">Description:</p>
+                            This dataset consists of 50,000 labeled movie reviews from IMDB, evenly split between positive and negative sentiments. 
+                            It is widely used for text classification and natural language processing tasks.
+                        </p>
+                        <p style="font-size: 16px; color: #34495e; font-weight: bold;">Key Features:</p>
+                        <p style="font-size: 16px; color: #2c3e50; margin-left: 20px;">- <b>review:</b> The text of the movie review.<br>
+                        - <b>sentiment:</b> Label indicating whether the review is positive or negative.</p>
+                        <p style="font-size: 18px; font-weight: bold; color: #2c3e50;">2. TMDB 5000 Movie Dataset
+                        by TMDB | from Kaggle</p>
+
+                        <p>This dataset provides comprehensive metadata for 5000 movies, ideal for building recommendation systems or analyzing trends in the movie industry. It includes two files:
+
+                        <p style="font-size: 16px; color: #34495e; font-weight: bold;">tmdb_5000_credits.csv : </p>
+                        Contains detailed information about the cast, crew, and roles associated with each movie. This data is useful for analyzing the involvement of actors and directors in various projects.
+
+                        <p style="font-size: 16px; color: #34495e; font-weight: bold;">tmdb_5000_movies.csv : </p>
+                        Includes essential metadata such as movie titles, genres, budgets, revenues, popularity, and vote statistics. Perfect for understanding box office performance, genre popularity, and audience engagement over time.</p>
+                        </p>
+  
+  
+                    </div>
+                    <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
+                        <p><p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.6;"> 
+                            <strong>1. APIs and Libraries:</strong><br> 
+                            <strong>TMDB API:</strong> For fetching movie details, reviews, genres, trailers, and streaming platforms.<br> 
+                            <strong>Flask:</strong> Backend framework for integrating the ML models and managing API requests.<br> 
+                            <strong>Pandas:</strong> For data preprocessing and manipulation during ML model training.<br> 
+                            <strong>Scikit-learn:</strong> For training the sentiment analysis model (used algorithms like Bernoulli Naive Bayes). 
+                          </p> 
+                          
+                          <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.6;"> 
+                            <strong>2. Tools and Platforms:</strong><br> 
+                            <strong>Kaggle:</strong> Platform to access datasets like IMDB.<br> 
+                            <strong>Jupyter Notebook:</strong> Used for initial experimentation and model training.<br> 
+                            <strong>VS Code:</strong> IDE for developing the Flask app and frontend.<br> 
+                            <strong>Bootstrap:</strong> CSS framework for styling the frontend. 
+                          </p>
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="list-settings" role="tabpanel" aria-labelledby="list-settings-list">
+                        <p style="font-family: Arial, sans-serif; font-size: 18px; line-height: 1.6;"> 
+                            <strong>Techniques and Algorithms:</strong><br> 
+                            <strong>Cosine Similarity:</strong> Used for movie recommendation based on similarity.<br> 
+                            <strong>Bag-of-Words:</strong> Vectorization technique for text preprocessing in sentiment analysis.<br> 
+                            <strong>Bernoulli Naive Bayes:</strong> Machine learning algorithm used for sentiment classification. 
+                          </p>
+                    </div>
+                    <div class="tab-pane fade lead" id="list-live" role="tabpanel" aria-labelledby="list-live-list">
+                        <p><strong>1. Hybrid Recommendation Approach</strong><br>
+                            <ul><p>Movie Similarity Using NLP and Cosine Similarity:</p>
+                                <li>While most apps rely solely on collaborative 
+                                    filtering or basic content filtering, your app uses 
+                                    natural language processing (NLP) to analyze movie metadata, such as overviews, genres, and keywords.</li>
+                                    <li>The integration of cosine similarity ensures highly relevant recommendations by measuring the contextual similarity between movies.</li>
+                                    <ul> <p>Genre-Based Recommendations:</p>
+                                        <li>Offers tailored recommendations based on user-selected genres, adding a layer of personalization.</li>
+                                    </ul>
+                                </ul>
+                            </p>   
+                            <p><strong>2. Detailed Movie Information Integration:</strong><br>
+                            <ul>
+                                    <li>Fetches a wide range of details from the TMDB API, including cast, crew, runtime, overview, trailers, and streaming platforms.</li>
+                                    <li>Provides a "More Info" button, giving users an immersive experience without needing to switch platforms.</li>
+                                   
+                            </ul>
+                            </p>
+                            <p><strong>3. Designed for Engagement:</strong><br>
+                            <ul>
+                              <li>A dynamic and interactive interface built with HTML, CSS, and JavaScript enhances user experience.</li>  
+                                <li>Features like search bars, buttons, and carousels encourage user engagement and exploration.</li>
+
+                            </ul>
+                            </p>
+                            <p><strong>4. Sentiment Analysis for User Reviews:</strong><br>
+                                <ul>
+                                    <li>Most apps use basic keyword matching or popularity-based algorithms. By leveraging NLP and cosine similarity, your app provides contextually accurate recommendations.</li>
+                                </ul>
+                            </p>
+                            <p><strong>5. All-In-One Platform:</strong><br>
+                                <ul>
+                                    <li>Combines movie recommendations, genre-based exploration, detailed movie information, and sentiment analysis in a single platform.</li>
+                                    <li>Offers a comprehensive movie discovery experience for users with varying preferences.</li>
+                                    <li>With detailed movie descriptions, streaming options, reviews, and recommendations in one place, it eliminates the need to switch between multiple platforms.</li>
+                                </ul>
+
+                            </p>
+                        </p>
+                            <div style="font-family: Arial, sans-serif; font-size: 16px; line-height: 1.8; margin: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
+                                <h2 style="color: #333; font-weight: bold; text-align: center; margin-bottom: 20px;">Future Scope</h2>
+                                <ul style="list-style-type: disc; padding-left: 20px; margin-top: 0;">
+                                    <li>
+                                        <strong>User Account Integration:</strong>
+                                        <p style="margin: 5px 0;">Add user profiles to track watch history, preferences, and personalized recommendations.</p>
+                                    </li>
+                                    <li>
+                                        <strong>Collaborative Filtering:</strong>
+                                        <p style="margin: 5px 0;">Implement collaborative filtering for recommendations based on user behavior patterns and ratings.</p>
+                                    </li>
+                                    <li>
+                                        <strong>Multilingual Support:</strong>
+                                        <p style="margin: 5px 0;">Expand to support movie descriptions and recommendations in multiple languages.</p>
+                                    </li>
+                                    <li>
+                                        <strong>Real-Time Feedback:</strong>
+                                        <p style="margin: 5px 0;">Allow users to rate recommendations and refine the algorithm dynamically.</p>
+                                    </li>
+                                    <li>
+                                        <strong>Mobile App Development:</strong>
+                                        <p style="margin: 5px 0;">Extend functionality by creating a mobile application version for wider accessibility.</p>
+                                    </li>
+                                    <li>
+                                        <strong>Advanced Sentiment Analysis:</strong>
+                                        <p style="margin: 5px 0;">Enhance sentiment analysis by considering sarcasm and nuanced language in reviews.</p>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5 bg-light p-4 rounded shadow-sm" id="Privacy Policy">
+       
+          <div class="card-body">
+            <h5 class="card-title text-center text-primary lead" style="font-size:2rem; "><b>Privacy Policy</b></h5>
+            <p class="card-text lead" style="color: #090d11;">
+              Your privacy is of utmost importance to us. This movie recommendation app is designed to provide personalized recommendations while maintaining the highest standards of user data protection.
+            </p>
+            <h6 class="card-subtitle mt-4 mb-2 text-secondary">Data We Collect</h6>
+            <p class="card-text lead" style="color: #090d11;">
+              We collect only the necessary information, such as search queries, selected preferences (e.g., genres), and minimal interaction data, to improve your experience. We do not store any sensitive personal information, such as names, email addresses, or payment details.
+            </p>
+            <h6 class="card-subtitle mt-4 mb-2 text-secondary">How We Use Your Data</h6>
+            <p class="card-text lead" style="color: #090d11;">
+              The data collected is used solely to:
+              <ul class="lead">
+                <li>Provide tailored movie recommendations based on your interests.</li>
+                <li>Improve the performance and accuracy of our recommendation algorithms.</li>
+                <li>Analyze usage patterns to enhance the app's functionality and user experience.</li>
+              </ul>
+            </p>
+            <h6 class="card-subtitle mt-4 mb-2 text-secondary">Data Security</h6>
+            <p class="card-text lead" style="color: #090d11;">
+              We implement strict security measures to protect your data from unauthorized access, disclosure, or misuse. All interactions with the app are encrypted using modern security protocols.
+            </p>
+            <h6 class="card-subtitle mt-4 mb-2 text-secondary">Third-Party Services</h6>
+            <p class="card-text lead" style="color: #090d11;">
+              This app uses third-party APIs (e.g., TMDB API) to fetch movie information. These services may have their own privacy policies, and we recommend reviewing them for more details.
+            </p>
+            <h6 class="card-subtitle mt-4 mb-2 text-secondary">Your Choices</h6>
+            <p class="card-text lead" style="color: #090d11;">
+              You have the right to manage your data preferences. You can choose not to share specific information, but this may limit certain app features. For any data-related requests or queries, feel free to contact us.
+            </p>
+            <p class="text-muted text-center" style="font-size: 0.9rem;">
+              Last updated: January 2025
+            </p>
+          </div>
+    </div>
+    <div class=" container my-5 py-5" style="background-color: #f1e5e3; border-radius: 8px;" id="About">
+        <div class="row align-items-center">
+            <!-- Left Side: Image and Icons -->
+            <div class="col-md-4 text-center mb-4 mb-md-0">
+                <img src="/static/pic.jpg" alt="Your Image" class="img-fluid card-container  border border-light" style="max-width: 300px; height: auto; object-fit: cover;">
+                <div class="mt-3 d-flex justify-content-center gap-5">
+                    <a href="https://www.instagram.com/sohiniii06/" target="_blank" class="mx-2">
+                        <img src="/static/instagram.png" alt="Instagram" class="social-icon">
+                    </a>
+                    <a href="https://github.com/sohini062003" target="_blank" class="mx-2">
+                        <img src="/static/github (1).png" alt="GitHub" class="social-icon">
+                    </a>
+                    <a href="https://www.linkedin.com/in/sohini-mukherjee-b0596b284/" target="_blank" class="mx-2">
+                        <img src="/static/linkedin.png" alt="LinkedIn" class="social-icon">
+                    </a>
+                </div>
+            </div>
+            
+    
+            <!-- Right Side: About Me Content -->
+            <div class="col-md-8" >
+                <h2 class="text-dark font-weight-bold mb-2 lead fs-2"><strong>About Me!</strong></h2>
+                <p class="text-muted lead" style="font-size: 18px; font-weight: 459; line-height: 1.8;"> Hey there! I'm Sohini Mukherjee, a curious soul with a passion for full-stack web development and all things tech. I absolutely love diving into new technologies, exploring the endless possibilities of AI and machine learning, and crafting seamless user experiences. Whether it's building dynamic applications or solving complex problems, I thrive on the excitement of turning ideas into reality and creating something impactful. </p> 
+                <p class="text-muted lead" style="font-size: 18px; font-weight: 459; line-height: 1.8;"> When I'm not coding, you'll often find me on YouTube, soaking up knowledge about the latest tools, frameworks, and techniques to level up my skills. I genuinely enjoy upskilling, exploring innovative solutions, and staying ahead in the ever-evolving tech landscape. Life’s an exciting journey, and for me, it’s all about learning, building, and connecting with like-minded people to create something awesome together! Let’s make magic happen! </p>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        &copy; 2025 Movie Recommendation Project | All Rights Reserved
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

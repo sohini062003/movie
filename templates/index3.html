@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendation System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style3.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Goudy+Bookletter+1911&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Sedan:ital@0;1&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Goudy+Bookletter+1911&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Sedan:ital@0;1&family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="/static/MOV ‘ EOUS3.png" alt="Logo" width="200" >
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#recommendations">Recommendations</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+<br>
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="container texthero text-center lead">
+            <h1 style="font-family: Cinzel Decorative;">Discover Movies You Love</h1>
+            <p >Get personalized movie recommendations and explore films by genre, all in one place!</p>
+        </div>
+    </div>
+
+    <!-- Content Section -->
+    <div class="container  p-4 my-5 content">
+        <h2 class="text-center " style="color:#debcd4; font-size: 2rem; font-weight: 500; font-family: Urbanist;"><strong>Find Your Next Favorite Movie!</strong></h2>
+        <p class="text-center lead" style="color:#debcd4; font-size: 1.2rem;font-family: Sedan;">Select a movie you like or a genre you prefer, and let us recommend the best options for you. Our system uses advanced algorithms to deliver accurate recommendations tailored to your taste.</p>
+<br>
+<br>
+        <!-- Movie Selection Form -->
+         <div class="container-fluid">
+            <form action="/" method="POST" id="movieForm" class="mb-4 text-center">
+            <div class="mb-3">
+                <label for="movie-select" class="form-label" style="font-family: Urbanist;font-size: x-large;">Select a Movie:</label>
+                <select id="movie-select" name="selected_movie" class="form-select mx-auto">
+                    {% for movie in movie_list %}
+                        <option value="{{ movie }}">{{ movie }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-custom"style="font-family: Urbanist;">Get Recommendations</button>
+        </form>
+         </div>
+    <hr style="color:beige;">
+        <!-- Genre Selection Form -->
+         <div class="container-fluid">
+        <form action="/" method="POST" id="genreForm" class="text-center">
+            <div class="mb-3">
+                <label for="genre-select" class="form-label " style="font-family: Urbanist; font-size: x-large;">Select a Genre:</label>
+                <select id="genre-select" name="selected_genre" class="form-select mx-auto dropdown-toggle" ata-bs-toggle="dropdown" aria-expanded="false">
+                    {% for genre_id, genre_name in genres.items() %}
+                        <option value="{{ genre_name }}">{{ genre_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-custom" style="font-family: Urbanist;">Get Recommendations</button>
+        </form>
+        </div>
+
+    <!-- Recommendations Section -->
+    <div id="recommendations" class="container my-5">
+        {% if recommended_movie_titles %}
+            <h2 class="text-center lead fs-3" style="color:#d9bfe4">Recommended Movies</h2>
+            <div class="recommendations-grid">
+                {% for i in range(recommended_movie_titles|length) %}
+                    <div class="recommendation-card">
+                        <img src="{{ recommended_movie_posters[i] }}" alt="{{ recommended_movie_titles[i] }} poster" class="movie-poster">
+                        <div class="movie-details">
+                            <h5 class="movie-title">{{ recommended_movie_titles[i] }}</h5>
+                            <a href="{{ url_for('movie_details', movie_id=recommended_movie_ids[i]) }}" class="btn btn-light movie-more-info">
+                                <i class="fas fa-info-circle"></i> More Info
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- About Section -->
+    <div class="about" id="about">
+        <div class="container about-container text-center">
+            <h1 class="display-6 text-light" style="font-family: Urbanist;">About</h1>
+            <p class="lead" style="color:#debcd4">Our system uses advanced machine learning algorithms to analyze movie similarities and provide tailored recommendations. You can either pick a movie you love or choose a genre you're in the mood for. The system evaluates movies based on their attributes, user ratings, and popularity to present you with top recommendations.</p>
+            <p style="color:#debcd4">MovieMate is a state-of-the-art movie recommendation system built to enhance your movie-watching experience. Powered by data-driven insights and seamless integration with the TMDb API, MovieMate delivers accurate and up-to-date recommendations. Whether you're a cinephile or a casual viewer, our platform ensures you'll never run out of great movies to watch.</p>
+            <a href="{{ url_for('about') }}" class="btn btn-dark" style="color:rgb(234, 208, 237)">View More Details About Project</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 MovieFinder. All rights reserved.</p>
+        <p>Powered by TMDb API</p>
+    </footer>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
