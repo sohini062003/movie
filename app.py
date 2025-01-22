@@ -20,8 +20,8 @@ similarity=joblib.load(open('similarity2.joblib', 'rb'))
 bnb= joblib.load(open('bnb.pkl', 'rb'))
 cv= joblib.load(open('cv.pkl', 'rb'))
 
-# TMDb API key
-API_KEY = '390e76286265f7638bb6b19d86474639'
+
+
 
 def fetch_reviews(movie_id):
     url = f"https://api.themoviedb.org/3/movie/{movie_id}/reviews?api_key={API_KEY}&language=en-US"
